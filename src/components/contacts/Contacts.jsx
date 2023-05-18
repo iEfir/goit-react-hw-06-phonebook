@@ -1,11 +1,25 @@
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+// import PropTypes from 'prop-types';
 import { Btn, Container, Item, Text } from './Contacts.styled';
+import { deleteContact, getContact, getFilter } from 'redux/contactsSlice';
 
-const Contacts = ({ contacts, deleteContact }) => {
+const Contacts = () => {
+  const contacts = useSelector(getContact);
+  const filter = useSelector(getFilter);
+
+  const dispatch = useDispatch();
+
+  // const quantityContacts = contacts.length;
+
+  const visibleContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
     <Container>
       <ul>
-        {contacts.map(({ id, name, number }) => (
+        {visibleContacts.map(({ id, name, number }) => (
           <Item key={id}>
             <Text>
               {name}: {number}
@@ -13,7 +27,7 @@ const Contacts = ({ contacts, deleteContact }) => {
             <Btn
               type="button"
               onClick={() => {
-                deleteContact(id);
+                dispatch(deleteContact(id));
               }}
             >
               Delete
@@ -25,9 +39,9 @@ const Contacts = ({ contacts, deleteContact }) => {
   );
 };
 
-export { Contacts };
+export default Contacts;
 
-Contacts.propTypes = {
-  contacts: PropTypes.array.isRequired,
-  deleteContact: PropTypes.func.isRequired,
-};
+// Contacts.propTypes = {
+//   contacts: PropTypes.array.isRequired,
+//   deleteContact: PropTypes.func.isRequired,
+// };

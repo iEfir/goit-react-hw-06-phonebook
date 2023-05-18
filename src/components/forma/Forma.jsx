@@ -1,17 +1,30 @@
 import { Formik } from 'formik';
-import { nanoid } from 'nanoid';
-import PropTypes from 'prop-types';
+import { Notify } from 'notiflix';
+// import PropTypes from 'prop-types';
 import { Button, Forms, Input } from './Forma.styled';
+import { addContacts, getContact } from 'redux/contactsSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
-const Forma = ({ addContact }) => {
+const Forma = () => {
   const initialValues = {
     name: '',
     number: '',
   };
 
+  const contacts = useSelector(getContact);
+  const dispatch = useDispatch();
+
+  const name = contacts.map(contact => contact.name);
+
   const onSubmit = (values, { resetForm }) => {
-    values.id = nanoid(10);
-    addContact(values);
+    if (name.includes(values.name)) {
+      Notify.warning(`${values.name} is already in contant`);
+
+      return;
+    } else {
+      dispatch(addContacts(values));
+    }
+
     resetForm();
   };
 
@@ -44,6 +57,6 @@ const Forma = ({ addContact }) => {
   );
 };
 
-export { Forma };
+export default Forma;
 
-Forma.propTypes = { addContact: PropTypes.func.isRequired };
+// Forma.propTypes = { addContact: PropTypes.func.isRequired };
