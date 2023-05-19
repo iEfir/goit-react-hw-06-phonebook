@@ -7,17 +7,11 @@ import { selectFilter } from 'redux/filtersSlice';
 // import { selectorFilteredContacts } from 'redux/selectors';
 
 const Contacts = () => {
-  // const filteredContacts = useSelector(selectorFilteredContacts);
-  // console.log('filteredContacts:', filteredContacts);
-
   const contacts = useSelector(selectContact);
-  console.log('contacts:', contacts);
 
   const filter = useSelector(selectFilter);
-  console.log('filter:', filter);
 
   const values = Object.values(contacts);
-  console.log('values:', values);
 
   const localFiltredContacts = values.filter(contact =>
     contact.name.toLowerCase().includes(filter)

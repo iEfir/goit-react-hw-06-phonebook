@@ -55,6 +55,5 @@ export const contactReducer = persistReducer(
 );
 
 export const { addContacts, deleteContact } = contactsSlice.actions;
-// export const contactsReducer = contactsSlice.reducer;
 
 export const selectContact = state => state.contacts.contacts;
