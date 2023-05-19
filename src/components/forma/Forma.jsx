@@ -2,7 +2,7 @@ import { Formik } from 'formik';
 import { Notify } from 'notiflix';
 // import PropTypes from 'prop-types';
 import { Button, Forms, Input } from './Forma.styled';
-import { addContacts, getContact } from 'redux/contactsSlice';
+import { addContacts, selectContact } from 'redux/contactsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Forma = () => {
@@ -11,21 +11,24 @@ const Forma = () => {
     number: '',
   };
 
-  const contacts = useSelector(getContact);
+  const contacts = useSelector(selectContact);
+
   const dispatch = useDispatch();
 
-  const name = contacts.map(contact => contact.name);
+  const nameCheck = name => {
+    return contacts.filter(contact => contact.name.includes(name));
+  };
 
   const onSubmit = (values, { resetForm }) => {
-    if (name.includes(values.name)) {
-      Notify.warning(`${values.name} is already in contant`);
+    resetForm();
+    const check = nameCheck(values.name);
 
-      return;
-    } else {
+    if (check.length <= 0) {
       dispatch(addContacts(values));
+      return;
     }
 
-    resetForm();
+    Notify.warning(`${values.name} is already in contant`);
   };
 
   return (

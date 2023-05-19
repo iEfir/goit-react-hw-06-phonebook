@@ -1,3 +1,5 @@
+import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
 import { createSlice } from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
 
@@ -8,12 +10,14 @@ const contactsList = [
   { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
 ];
 
-export const contactsSlice = createSlice({
-  name: 'items',
-  initialState: {
-    contacts: contactsList,
-    filter: '',
-  },
+const initialState = {
+  contacts: contactsList,
+};
+
+const contactsSlice = createSlice({
+  name: 'contacts',
+  initialState,
+
   reducers: {
     addContacts: {
       reducer(state, action) {
@@ -36,18 +40,21 @@ export const contactsSlice = createSlice({
       );
       state.contacts.splice(index, 1);
     },
-
-    setValueFilter(state, action) {
-      return (state.filter = action.payload);
-    },
   },
 });
 
-export const { addContacts, deleteContact, setValueFilter } =
-  contactsSlice.actions;
-export const contactsReducer = contactsSlice.reducer;
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['contacts'],
+};
 
-export const getContact = state => state.items.contacts;
-export const getFilter = state => state.items.filter;
+export const contactReducer = persistReducer(
+  persistConfig,
+  contactsSlice.reducer
+);
 
-// Notify.warning(`${action.payload} is already in contant`);
+export const { addContacts, deleteContact } = contactsSlice.actions;
+// export const contactsReducer = contactsSlice.reducer;
+
+export const selectContact = state => state.contacts.contacts;

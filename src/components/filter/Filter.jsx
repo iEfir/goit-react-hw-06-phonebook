@@ -1,5 +1,6 @@
 // import PropTypes from 'prop-types';
-import { setValueFilter } from 'redux/contactsSlice';
+
+import { setFilter } from 'redux/filtersSlice';
 import { Input, Label } from './Filter.styled';
 import { useDispatch } from 'react-redux';
 
@@ -8,9 +9,8 @@ const Filter = () => {
 
   const handleInput = e => {
     const normalizeFilter = e.target.value;
-    console.log('normalizeFilter:', normalizeFilter);
 
-    dispatch(setValueFilter(normalizeFilter));
+    dispatch(setFilter(normalizeFilter));
   };
 
   return (

@@ -2,24 +2,33 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 // import PropTypes from 'prop-types';
 import { Btn, Container, Item, Text } from './Contacts.styled';
-import { deleteContact, getContact, getFilter } from 'redux/contactsSlice';
+import { deleteContact, selectContact } from 'redux/contactsSlice';
+import { selectFilter } from 'redux/filtersSlice';
+// import { selectorFilteredContacts } from 'redux/selectors';
 
 const Contacts = () => {
-  const contacts = useSelector(getContact);
-  const filter = useSelector(getFilter);
+  // const filteredContacts = useSelector(selectorFilteredContacts);
+  // console.log('filteredContacts:', filteredContacts);
+
+  const contacts = useSelector(selectContact);
+  console.log('contacts:', contacts);
+
+  const filter = useSelector(selectFilter);
+  console.log('filter:', filter);
+
+  const values = Object.values(contacts);
+  console.log('values:', values);
+
+  const localFiltredContacts = values.filter(contact =>
+    contact.name.toLowerCase().includes(filter)
+  );
 
   const dispatch = useDispatch();
-
-  // const quantityContacts = contacts.length;
-
-  const visibleContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
 
   return (
     <Container>
       <ul>
-        {visibleContacts.map(({ id, name, number }) => (
+        {localFiltredContacts.map(({ id, name, number }) => (
           <Item key={id}>
             <Text>
               {name}: {number}
